@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import inlineformset_factory
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, DetailView, CreateView, ListView, DeleteView, UpdateView
@@ -9,7 +10,7 @@ from catalog.models import Course, Version
 class CoursesView(TemplateView):
     template_name = 'catalog/courses.html'
     extra_context = {
-        'base_title': 'Sky.pro',
+        'base_title': 'Skypro',
         'title': 'Учим IT-профессиям с нуля и гарантируем новую работу.'
     }
 
@@ -24,7 +25,7 @@ class ContactsView(TemplateView):
     template_name = 'catalog/contacts.html'
 
 
-class CourseDetailView(DetailView):
+class CourseDetailView(LoginRequiredMixin, DetailView):
     model = Course
 
     def get_context_data(self, **kwargs):
@@ -35,7 +36,7 @@ class CourseDetailView(DetailView):
         return context_data
 
 
-class CourseCreateView(CreateView):
+class CourseCreateView(LoginRequiredMixin, CreateView):
     model = Course
     form_class = CourseForm
     success_url = reverse_lazy('catalog:courses')
@@ -55,6 +56,7 @@ class CourseCreateView(CreateView):
     def form_valid(self, form):
         formset = self.get_context_data()['formset']
         self.object = form.save()
+        form.instance.author = self.request.user
 
         if formset.is_valid():
             formset.instance = self.object
@@ -67,12 +69,12 @@ class VersionListView(ListView):
     model = Version
 
 
-class CourseDeleteView(DeleteView):
+class CourseDeleteView(LoginRequiredMixin, DeleteView):
     model = Course
     success_url = reverse_lazy('catalog:courses')
 
 
-class CourseUpdateView(UpdateView):
+class CourseUpdateView(LoginRequiredMixin, UpdateView):
     model = Course
     form_class = CourseForm
     success_url = reverse_lazy('catalog:courses')
