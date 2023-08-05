@@ -1,8 +1,8 @@
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, DetailView, CreateView
+from django.views.generic import TemplateView, DetailView, CreateView, ListView
 
 from catalog.forms import CourseForm
-from catalog.models import Course
+from catalog.models import Course, Version
 
 
 class CoursesView(TemplateView):
@@ -26,8 +26,20 @@ class ContactsView(TemplateView):
 class CourseDetailView(DetailView):
     model = Course
 
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        course = self.get_object()
+        context_data['object_list'] = Version.objects.filter(course=course, is_active=True)
+
+        return context_data
+
 
 class CourseCreateView(CreateView):
     model = Course
     form_class = CourseForm
     success_url = reverse_lazy('catalog:courses')
+
+
+class VersionListView(ListView):
+    model = Version
+

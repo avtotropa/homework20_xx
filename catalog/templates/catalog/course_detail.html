@@ -1,12 +1,25 @@
 {% extends 'catalog/base.html' %}
 {% load my_tags %}
 {% block content %}
-    <div class="row d-flex justify-content-center text-center">
-        <div class="card" style="width: 20rem;">
-            <img src="{{ course.image|mymedia }}" class="card-img-top" alt="...">
+    <div class="col-6 text-center">
+        <div class="card">
+            <img  src="{{ course.image|mymedia }}" class="card-img-top" alt="...">
             <div class="card-body">
                 <p class="card-text">{{ course.description }}</p>
             </div>
         </div>
+    </div>
+    <div class="col-6">
+    <h2 class="mb-4">Доступные версии для обучения:</h2>
+        {% for object in object_list %}
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5>{{ object.name }}</h5>
+                </div>
+                <div class="card-body">
+                    Номер версии: {{ object.number_version }}
+                </div>
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}
