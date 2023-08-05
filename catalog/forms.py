@@ -1,9 +1,16 @@
 from django import forms
 
-from catalog.models import Course
+from catalog.models import Course, Version
 
 
-class CourseForm(forms.ModelForm):
+class StyleForMixin:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+
+
+class CourseForm(StyleForMixin, forms.ModelForm):
     class Meta:
         model = Course
         fields = '__all__'
@@ -20,3 +27,10 @@ class CourseForm(forms.ModelForm):
                 raise forms.ValidationError(f'В вашем названии курса есть запретное слово "{forbidden_word.title()}".')
 
         return cleaned_data
+
+
+class VersionForm(StyleForMixin, forms.ModelForm):
+
+    class Meta:
+        model = Version
+        fields = '__all__'

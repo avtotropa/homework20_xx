@@ -1,18 +1,44 @@
 {% extends 'catalog/base.html' %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-6">
-            <div class="card">
-                <form method="post">
-                    <div class="card-header">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <h3 class="card-header">
                         Добавление нового курса
-                    </div>
+                    </h3>
                     <div class="card-body">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <button type="submit" class="btn btn-outline-success">Добавить курс</button>
-                </form>
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            {% if object %}
+                                <button type="submit" class="btn btn-outline-success">Сохранить</button>
+                            {% else %}
+                                <button type="submit" class="btn btn-outline-success">Добавить курс</button>
+                            {% endif %}
+                            <a href="{% url 'catalog:courses' %}" class="btn btn-outline-danger">Отмена</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card">
+                    <h3 class="card-header">
+                        Версии курса
+                    </h3>
+                    <div class="card-body">
+                        <form method="post" enctype="multipart/form-data">
+                            {{ formset.management_form }}
+                            {% for form in formset.forms %}
+                                {{ form.as_p }}
+                                {% if not forloop.last %}
+                                    <hr>
+                                {% endif %}
+                            {% endfor %}
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
