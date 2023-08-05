@@ -11,6 +11,7 @@ class BlogCreateView(CreateView):
     success_url = reverse_lazy('blogs:blogs')
 
     def form_valid(self, form):
+
         if form.is_valid():
             new_blog = form.save()
             new_blog.slug = slugify(new_blog.header)
@@ -31,6 +32,11 @@ class BlogListView(ListView):
 
         return context
 
+    def get_queryset(self, *args, **kwargs):
+        queryset = super().get_queryset(*args, **kwargs)
+        queryset = queryset.filter(is_published=True)
+        return queryset
+
 
 class BlogDetailView(DetailView):
     model = Blog
@@ -39,10 +45,11 @@ class BlogDetailView(DetailView):
         self.object = super().get_object(queryset)
         self.object.count_views += 1
         self.object.save()
+
         return self.object
 
 
-class BloUpdateView(UpdateView):
+class BlogUpdateView(UpdateView):
     model = Blog
     fields = ('header', 'content', 'image',)
     success_url = reverse_lazy('blogs:blogs')

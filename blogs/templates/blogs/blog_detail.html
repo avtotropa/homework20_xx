@@ -6,7 +6,7 @@
             <img src="{{ blog.image|mymedia }}" class="card-img-top" alt="...">
             <div class="card-body">
                 <p class="card-text">
-                    <span class="blog-title">{{ object.header }}</span>
+                    <span class="blog-title">{{ object.header }} ({{ object.slug }})</span>
                 </p>
                 <hr>
                 <p class="card-text">{{ object.content }}</p>

@@ -7,13 +7,11 @@
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     {{ form.as_p }}
-                    <button type="submit" class="btn btn-success">
-                        {% if object %}
-                            Сохранить
-                        {% else %}
-                            Создать блог
-                        {% endif %}
-                    </button>
+                    {% if object %}
+                        <a href="{% url 'blogs:view' object.pk %}" type="submit" class="btn btn-success">Сохранить</a>
+                    {% else %}
+                        <button type="submit" class="btn btn-success">Создать блог</button>
+                    {% endif %}
                 </form>
             </div>
         </div>
