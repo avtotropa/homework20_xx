@@ -1,0 +1,12 @@
+{% extends 'catalog/base.html' %}
+{% load my_tags %}
+{% block content %}
+    <div class="row d-flex justify-content-center text-center">
+        <div class="card" style="width: 20rem;">
+            <img src="{{ course.image|mymedia }}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <p class="card-text">{{ course.description }}</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
